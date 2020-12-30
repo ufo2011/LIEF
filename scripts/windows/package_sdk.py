@@ -47,14 +47,13 @@ cmake_config_shared = [
 build_args = ['--config', 'Release']
 
 
-configure_cmd = ['cmake', LIEF_SRC.resolve().as_posix()] + cmake_config_shared
-print(" ".join(configure_cmd))
+configure_cmd = ['cmake', LIEF_SRC.resolve().as_posix()]
 
-subprocess.check_call(configure_cmd, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
+subprocess.check_call(configure_cmd + cmake_config_shared, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
 subprocess.check_call(['cmake', '--build', '.', '--target', "all"] + build_args, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
 
 
-subprocess.check_call(configure_cmd, cwd=BUILD_STATIC_PATH.resolve().as_posix(), env=env)
+subprocess.check_call(configure_cmd + cmake_config_static, cwd=BUILD_STATIC_PATH.resolve().as_posix(), env=env)
 subprocess.check_call(['cmake', '--build', '.', '--target', "all"] + build_args, cwd=BUILD_STATIC_PATH.resolve().as_posix(), env=env)
 
 subprocess.check_call([CPACK_BIN, '--config', CPACK_CONFIG_PATH.resolve().as_posix()], cwd=BUILD_PATH.resolve().as_posix(), env=env)
