@@ -166,6 +166,7 @@ install:
   - if [ "$GCOV" == "ON" ]; then sudo make -C lcov-1.13/ install; fi
 
 script:
+  # Build LIEF Python bindings
   - >
     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
     then docker run --name lief_$PYTHON_VERSION

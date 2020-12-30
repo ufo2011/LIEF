@@ -99,6 +99,26 @@ foreach(example ${LIEF_CPP_EXAMPLES})
   endif()
 
   target_link_libraries("${output_name}" PUBLIC LIB_LIEF)
+
+  if (CMAKE_BUILD_TYPE MATCHES "Release")
+    if (UNIX AND NOT APPLE)
+        add_custom_command(
+          TARGET ${output_name}
+          COMMENT "Strip ${output_name}"
+          POST_BUILD
+          COMMAND ${CMAKE_STRIP} --strip-all $<TARGET_FILE:${output_name}>
+        )
+    endif()
+
+    if (APPLE)
+      add_custom_command(
+        TARGET ${output_name}
+        COMMENT "Strip ${output_name}"
+        POST_BUILD
+        COMMAND ${CMAKE_STRIP} -x -S $<TARGET_FILE:${output_name}>
+      )
+    endif()
+  endif()
   if(LIEF_INSTALL_COMPILED_EXAMPLES)
     install(
       TARGETS ${output_name}
