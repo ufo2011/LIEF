@@ -12,7 +12,7 @@ cmake ../../.. -GNinja \
   -DCMAKE_LINK_WHAT_YOU_USE=on \
   -DLIEF_PE=off \
   -DLIEF_ELF=off \
-  -DLIEF_ENABLE_JSON=off \
+  -DLIEF_ENABLE_JSON=on \
   -DLIEF_OAT=off \
   -DLIEF_DEX=off \
   -DLIEF_VDEX=off \
@@ -32,7 +32,7 @@ cmake ../../.. -GNinja \
   -DCMAKE_LINK_WHAT_YOU_USE=on \
   -DLIEF_PE=off \
   -DLIEF_ELF=off \
-  -DLIEF_ENABLE_JSON=off \
+  -DLIEF_ENABLE_JSON=on \
   -DLIEF_OAT=off \
   -DLIEF_DEX=off \
   -DLIEF_VDEX=off \
@@ -43,14 +43,14 @@ cmake ../../.. -GNinja \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=$(pwd)/install
 
-ninja
+ninja package
 
 popd
 pushd build/linux-x86-64
 cpack --config ../../cmake/cpack.config.cmake
 popd
 
-/usr/bin/mv build/linux-x86-64/*.tar.gz build/
+/bin/mv build/linux-x86-64/*.tar.gz build/
 ls -alh build
 
 # Fix permissions

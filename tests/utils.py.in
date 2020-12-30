@@ -23,7 +23,8 @@ def is_linux():
     return sys.platform.startswith("linux")
 
 def is_x86_64():
-    return platform.machine() == "x86_64"
+    machine = platform.machine().lower()
+    return machine in ("x86_64", "amd64")
 
 def is_aarch64():
     return platform.machine() == "aarch64"
