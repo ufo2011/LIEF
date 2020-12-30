@@ -131,6 +131,7 @@ addons:
     packages:
     - pyenv
     - ccache
+    - ninja
     update: true
 
 before_install:
@@ -175,15 +176,27 @@ script:
     -v $HOME/.ccache:/ccache
     -v $TRAVIS_BUILD_DIR:/src
     liefproject/manylinux1_x86_64
-    bash /src/scripts/docker/travis-linux.sh
-    && sudo chmod -R 777 dist/
-    && sudo chmod -R 777 build/;
+    bash /src/scripts/docker/travis-linux.sh;
+    fi
+  # Build LIEF SDK with Py39 build
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "linux" && "$PYTHON_VERSION" == "3.9"]];
+    then docker run --name lief_$PYTHON_VERSION
+    -e PYTHON_BINARY=$PYTHON_BINARY
+    -e CCACHE_DIR=/ccache
+    -v $HOME/.ccache:/ccache
+    -v $TRAVIS_BUILD_DIR:/src
+    liefproject/manylinux1_x86_64
+    bash /src/scripts/docker/travis-linux-sdk.sh;
     fi
   - >
     if [[ "$TRAVIS_OS_NAME" == "osx" ]];
     then sudo $PYTHON_BINARY -m pip install -U pip setuptools wheel
-    && $PYTHON_BINARY ./setup.py --lief-test --sdk build -j8 bdist_wheel;
+    && $PYTHON_BINARY ./setup.py --ninja --lief-test build bdist_wheel;
     fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.9"]];
+    then sh scripts/osx/package_sdk.sh; fi
 
 after_success:
   - make package
