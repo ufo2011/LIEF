@@ -178,9 +178,8 @@ script:
     liefproject/manylinux1_x86_64
     bash /src/scripts/docker/travis-linux.sh;
     fi
-  # Build LIEF SDK with Py39 build
   - >
-    if [[ "$TRAVIS_OS_NAME" == "linux" && "$PYTHON_VERSION" == "3.9"]];
+    if [[ "$TRAVIS_OS_NAME" == "linux" && "$PYTHON_VERSION" == "3.9" ]];
     then docker run --name lief_$PYTHON_VERSION
     -e PYTHON_BINARY=$PYTHON_BINARY
     -e CCACHE_DIR=/ccache
@@ -195,7 +194,7 @@ script:
     && $PYTHON_BINARY ./setup.py --ninja --lief-test build bdist_wheel;
     fi
   - >
-    if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.9"]];
+    if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.9" ]];
     then sh scripts/osx/package_sdk.sh; fi
 
 after_success:
