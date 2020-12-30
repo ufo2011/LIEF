@@ -1,6 +1,7 @@
 from setuptools import msvc
 import pathlib
 import os
+import sys
 import subprocess
 
 env = os.environ
@@ -18,7 +19,9 @@ BUILD_PATH.mkdir(exist_ok=True)
 BUILD_STATIC_PATH.mkdir(exist_ok=True)
 BUILD_SHARED_PATH.mkdir(exist_ok=True)
 
-arch = 'x64'
+is64 = sys.maxsize > 2**32
+arch = 'x64' if is64 else 'x86'
+
 ninja_env = msvc.msvc14_get_vc_env(arch)
 env.update(ninja_env)
 
