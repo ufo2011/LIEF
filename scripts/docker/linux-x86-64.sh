@@ -43,7 +43,7 @@ cmake ../../.. -GNinja \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=$(pwd)/install
 
-ninja package
+ninja
 
 popd
 pushd build/linux-x86-64
