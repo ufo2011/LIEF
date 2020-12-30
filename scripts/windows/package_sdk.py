@@ -34,14 +34,14 @@ cmake_config_static = [
     "-DLIEF_USE_CRT_RELEASE=MT",
 ]
 
-cmake_config_shared = [
-    "-G", "Ninja",
-    "-DCMAKE_BUILD_TYPE=Release",
-    "-DBUILD_SHARED_LIBS=on",
-    "-DLIEF_PYTHON_API=off",
-    "-DLIEF_INSTALL_COMPILED_EXAMPLES=off",
-    "-DLIEF_USE_CRT_RELEASE=MT",
-]
+#cmake_config_shared = [
+#    "-G", "Ninja",
+#    "-DCMAKE_BUILD_TYPE=Release",
+#    "-DBUILD_SHARED_LIBS=on",
+#    "-DLIEF_PYTHON_API=off",
+#    "-DLIEF_INSTALL_COMPILED_EXAMPLES=off",
+#    "-DLIEF_USE_CRT_RELEASE=MT",
+#]
 
 
 build_args = ['--config', 'Release']
@@ -49,12 +49,12 @@ build_args = ['--config', 'Release']
 
 configure_cmd = ['cmake', LIEF_SRC.resolve().as_posix()]
 
-subprocess.check_call(configure_cmd + cmake_config_shared, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
-subprocess.check_call(['cmake', '--build', '.', '--target', "all"] + build_args, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
+#subprocess.check_call(configure_cmd + cmake_config_shared, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
+#subprocess.check_call(['cmake', '--build', '.', '--target', "all"] + build_args, cwd=BUILD_SHARED_PATH.resolve().as_posix(), env=env)
 
 
 subprocess.check_call(configure_cmd + cmake_config_static, cwd=BUILD_STATIC_PATH.resolve().as_posix(), env=env)
 subprocess.check_call(['cmake', '--build', '.', '--target', "all"] + build_args, cwd=BUILD_STATIC_PATH.resolve().as_posix(), env=env)
 
-subprocess.check_call([CPACK_BIN, '--config', CPACK_CONFIG_PATH.resolve().as_posix()], cwd=BUILD_PATH.resolve().as_posix(), env=env)
+#subprocess.check_call([CPACK_BIN, '--config', CPACK_CONFIG_PATH.resolve().as_posix()], cwd=BUILD_PATH.resolve().as_posix(), env=env)
 
