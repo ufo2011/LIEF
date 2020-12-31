@@ -51,6 +51,7 @@ jobs:
       #      fi
 
       - services: docker
+        name: "Linux Python 3.7 | SDK | Doc Trigger"
         script:
           - >
             docker run --name lief_37
@@ -85,10 +86,11 @@ jobs:
             fi
 
       - services: docker
+        name: "Linux Python 3.8"
         script:
           - >
             docker run --name lief_38
-            -e PYTHON_BINARY=/opt/python/cp38-cp38m/bin/python3.8
+            -e PYTHON_BINARY=/opt/python/cp38-cp38/bin/python3.8
             -e CCACHE_DIR=/ccache
             -v $HOME/.ccache:/ccache
             -v $TRAVIS_BUILD_DIR:/src
@@ -109,7 +111,7 @@ jobs:
       #  script:
       #    - >
       #      docker run --name lief_39
-      #      -e PYTHON_BINARY=/opt/python/cp39-cp39m/bin/python3.9
+      #      -e PYTHON_BINARY=/opt/python/cp39-cp39/bin/python3.9
       #      -e CCACHE_DIR=/ccache
       #      -v $HOME/.ccache:/ccache
       #      -v $TRAVIS_BUILD_DIR:/src
@@ -190,6 +192,7 @@ jobs:
       - os: osx
         osx_image: xcode11
         compiler: clang
+        name: "OSX Python 3.8"
         script:
           - pyenv install --skip-existing 3.8.0
           - >
@@ -209,6 +212,7 @@ jobs:
       - os: osx
         osx_image: xcode11
         compiler: clang
+        name: "OSX Python 3.8 | SDK"
         script:
           - pyenv install --skip-existing 3.9.0
           - >
