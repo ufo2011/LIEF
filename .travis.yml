@@ -246,9 +246,17 @@ notifications:
     on_failure: always
 
 cache:
-  - ccache
+  - ccache: true
   - directories:
     - $HOME/.pyenv
+    - $HOME/.ccache
+
+env:
+  global:
+    - USE_CCACHE=1
+    - CCACHE_COMPRESS=1
+    - CCACHE_MAXSIZE=10.0G
+    - CCACHE_CPP2=1
 
 addons:
   homebrew:
