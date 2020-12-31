@@ -40,4 +40,4 @@ popd
 
 /bin/mv build/$ARCH_DIR/*.tar.gz build/
 
-chown -R 1000:1000 $ARCH_DIR
+chown -R 1000:1000 build/$ARCH_DIR
