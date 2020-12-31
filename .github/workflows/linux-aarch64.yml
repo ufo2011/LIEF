@@ -12,7 +12,7 @@ jobs:
           docker run \
            -e CCACHE_DIR=/ccache \
            -v $GITHUB_WORKSPACE:/work \
-          --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/android-aarch64.sh
+          --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/linux-aarch64.sh
 
 
 
