@@ -62,6 +62,7 @@ case $branch in
     devel*) ;;
     master*) ;;
     deploy*) ;;
+    enhancement/cpack*) ;;
     *) exit 0;;
 esac
 
@@ -73,7 +74,7 @@ rev=$(git rev-parse --verify HEAD)
 timestamp=$(git log -n1 --format='%at' $rev)
 date=$(TZ=UTC0 date -d "@$timestamp" '+%Y%m%d-%H%M%S')
 #branch="$branch-$date-${rev:0:6}"
-branch="gh-pages"
+branch="gh-pages-test"
 if [[ -n $APPVEYOR_JOB_ID ]]; then
     branch="$branch"
     git_user="AppVeyor CI"
