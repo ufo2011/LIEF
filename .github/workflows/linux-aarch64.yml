@@ -4,15 +4,15 @@ on: push
 jobs:
   linux-sdk:
     runs-on: ubuntu-latest
-    container:
-      image: liefproject/manylinux2014-aarch64:base
-      env:
-        CCACHE_DIR: /ccache
-      volumes:
-        - $GITHUB_WORKSPACE:/src
     steps:
       - uses: actions/checkout@v2
       - name: Build
-        run: /src/scripts/docker/linux-x86-64.sh
+        shell: bash
+        run: |
+          docker run \
+           -e CCACHE_DIR=/ccache \
+           -v $GITHUB_WORKSPACE:/work \
+           --rm liefproject/android-arm64 bash /work/scripts/docker/android-aarch64.sh
+
 
 
