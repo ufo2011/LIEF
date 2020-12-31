@@ -19,7 +19,7 @@ CMAKE_PATH = pathlib.Path(shutil.which("cmake.exe"))
 CPACK_PATH = CMAKE_PATH.parent / "cpack.exe"
 
 if CPACK_PATH.is_file():
-    print("Can't find cpack.exe", file=sys.stderr)
+    print("Can't find cpack.exe at: {}".format(CPACK_PATH), file=sys.stderr)
     sys.exit(1)
 
 CPACK_BIN = CPACK_PATH.as_posix()
