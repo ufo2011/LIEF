@@ -249,7 +249,6 @@ cache:
   - ccache
   - directories:
     - $HOME/.pyenv
-    - $TRAVIS_BUILD_DIR/build
 
 addons:
   homebrew:
@@ -257,11 +256,13 @@ addons:
     - pyenv
     - ccache
     - ninja
-    update: true
+    #update: true
 
 before_install:
-  - ccache -s
+  - ccache --set-config=max_size=10.0G
+  - ccache --zero-stats --version
   - ccache --set-config=compiler_check=content
+  - ccache --show-config
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker pull liefproject/manylinux1_x86_64:latest; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PREFIX="/usr/local"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
@@ -269,6 +270,9 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PYTHON_CONFIGURE_OPTS="--enable-shared --enable-unicode=ucs2"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv root; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv install --list  ;fi
+
+after_script:
+  - ccache --show-stats
 
 deploy:
   provider: releases
