@@ -2,14 +2,42 @@
 set -ex
 apt-get --no-install-recommends install -y ccache
 
-mkdir -p build/android-arm && cd build/android-arm
+export CXXFLAGS='-ffunction-sections -fdata-sections -fvisibility-inlines-hidden'
+export CFLAGS='-ffunction-sections -fdata-sections'
+export LDFLAGS='-Wl,--gc-sections -Wl,--exclude-libs,ALL'
 
-cmake ../.. -GNinja \
+ARCH_DIR="android-arm"
+
+mkdir -p build/$ARCH_DIR/static-release && mkdir -p build/$ARCH_DIR/shared-release
+pushd build/$ARCH_DIR/shared-release
+
+cmake ../../.. -GNinja \
+  -DCMAKE_LINK_WHAT_YOU_USE=on \
+  -DBUILD_SHARED_LIBS=on \
   -DLIEF_PYTHON_API=off \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX=/work/build/android-arm/install
+  -DLIEF_INSTALL_COMPILED_EXAMPLES=off \
+  -DCMAKE_BUILD_TYPE=Release
 
-ninja install
+ninja
 
-# Fix permissions
-chown -R 1000:1000 /work/build/android-arm
+popd
+pushd build/$ARCH_DIR/static-release
+
+cmake ../../.. -GNinja \
+  -DCMAKE_LINK_WHAT_YOU_USE=on \
+  -DBUILD_SHARED_LIBS=off \
+  -DLIEF_PYTHON_API=off \
+  -DLIEF_INSTALL_COMPILED_EXAMPLES=on \
+  -DCMAKE_BUILD_TYPE=Release
+
+ninja
+
+popd
+
+pushd build/$ARCH_DIR
+cpack --config ../../cmake/cpack.config.cmake
+popd
+
+/bin/mv build/$ARCH_DIR/*.tar.gz build/
+
+chown -R 1000:1000 $ARCH_DIR

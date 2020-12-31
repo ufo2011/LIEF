@@ -1,27 +1,43 @@
 #!/usr/bin/bash
+
 set -ex
 
-mkdir -p build/linux-aarch64 && cd build/linux-aarch64
-
 export CXXFLAGS='-ffunction-sections -fdata-sections -fvisibility-inlines-hidden -static-libgcc -static-libstdc++'
+export CFLAGS='-ffunction-sections -fdata-sections -static-libgcc -static-libstdc++'
 export LDFLAGS='-Wl,--gc-sections -Wl,--exclude-libs,ALL'
 
+ARCH_DIR="linux-aarch64"
 
-#cmake ../.. -GNinja \
-#  -DBUILD_SHARED_LIBS=off \
-#  -DLIEF_PYTHON_API=off \
-#  -DCMAKE_BUILD_TYPE=Release \
-#  -DCMAKE_INSTALL_PREFIX=/work/build/linux-aarch64/install
+mkdir -p build/$ARCH_DIR/static-release && mkdir -p build/$ARCH_DIR/shared-release
+pushd build/$ARCH_DIR/shared-release
 
-#ninja install
-
-cmake ../.. -GNinja \
+cmake ../../.. -GNinja \
+  -DCMAKE_LINK_WHAT_YOU_USE=on \
   -DBUILD_SHARED_LIBS=on \
   -DLIEF_PYTHON_API=off \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX=/work/build/linux-aarch64/install
+  -DLIEF_INSTALL_COMPILED_EXAMPLES=off \
+  -DCMAKE_BUILD_TYPE=Release
 
-ninja install
+ninja
 
-# Fix permissions
-chown -R 1000:1000 /work/build/linux-aarch64
+popd
+pushd build/$ARCH_DIR/static-release
+
+cmake ../../.. -GNinja \
+  -DCMAKE_LINK_WHAT_YOU_USE=on \
+  -DBUILD_SHARED_LIBS=off \
+  -DLIEF_PYTHON_API=off \
+  -DLIEF_INSTALL_COMPILED_EXAMPLES=on \
+  -DCMAKE_BUILD_TYPE=Release
+
+ninja
+
+popd
+
+pushd build/$ARCH_DIR
+cpack --config ../../cmake/cpack.config.cmake
+popd
+
+/bin/mv build/$ARCH_DIR/*.tar.gz build/
+
+chown -R 1000:1000 $ARCH_DIR
