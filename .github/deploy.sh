@@ -116,10 +116,11 @@ git config user.email "lief@quarkslab.com"
 if [[ $new_branch == 1 ]]; then
     git checkout --orphan "$branch"
     git reset --hard || true
+else
+    git reset --soft HEAD~1
 fi
 
 #git reset --soft `git rev-list --all | tail -1`
-git reset --soft HEAD~1
 git ls-files -v
 
 mkdir -p lief && cd lief
