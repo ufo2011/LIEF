@@ -66,4 +66,3 @@ subprocess.check_call(configure_cmd + cmake_config_static, cwd=BUILD_STATIC_PATH
 subprocess.check_call(['cmake', '--build', '.', '--target', "all"] + build_args, cwd=BUILD_STATIC_PATH.resolve().as_posix(), env=env)
 
 subprocess.check_call([CPACK_BIN, '--config', CPACK_CONFIG_PATH.resolve().as_posix()], cwd=BUILD_PATH.resolve().as_posix(), env=env)
-
