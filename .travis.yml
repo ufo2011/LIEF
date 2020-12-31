@@ -273,7 +273,7 @@ before_install:
   - ccache -p
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker pull liefproject/manylinux1_x86_64:latest; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PREFIX="/usr/local"; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
+  #- if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PYTHON_CONFIGURE_OPTS="--enable-shared --enable-unicode=ucs2"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv root; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv install --list  ;fi
