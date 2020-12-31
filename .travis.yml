@@ -262,7 +262,7 @@ before_install:
   - ccache --set-config=max_size=10.0G
   - ccache --zero-stats --version
   - ccache --set-config=compiler_check=content
-  - ccache --show-config
+  - ccache -p
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker pull liefproject/manylinux1_x86_64:latest; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PREFIX="/usr/local"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
