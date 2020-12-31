@@ -13,7 +13,7 @@ environment:
     secure: TT7SXISIifq2/tf02n2ATgPj+Ky4Cjl3Fg44BAfyI4yRa4i87UAQIx5EFeV63+Xv2rhcU7JcMgl+An7QBrV6ofuQ9jxbuw+Gd1GqcCrAIyY=
  LIEF_AUTOMATIC_BUILDS_IV:
     secure: /S6Vbt3vEisoC81siFbkqOXQeVnwxLZZPMYp1r79G7h+HFjLlWUZSidxxpsAgHNE
- SCCACHE_CACHE_SIZE: "250M"
+ SCCACHE_CACHE_SIZE: "750M"
  SCCACHE_DIR: C:\Users\appveyor\AppData\Local\Mozilla\sccache
  SCCACHE_ERROR_LOG: C:\projects\sccache.log
  matrix:

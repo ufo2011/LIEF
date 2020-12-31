@@ -5,39 +5,39 @@ git:
 
 jobs:
     include:
-      - os: linux
-        dist: xenial
-        services: docker
-        env: >
-          [
-          PYTHON_VERSION=3.5                                 ,
-          PYTHON_BINARY=/opt/python/cp35-cp35m/bin/python3.5 ,
-          ]
+      #- os: linux
+      #  dist: xenial
+      #  services: docker
+      #  env: >
+      #    [
+      #    PYTHON_VERSION=3.5                                 ,
+      #    PYTHON_BINARY=/opt/python/cp35-cp35m/bin/python3.5 ,
+      #    ]
 
-      - os: linux
-        dist: xenial
-        services: docker
-        env: >
-          [
-          PYTHON_VERSION=3.6                                 ,
-          PYTHON_BINARY=/opt/python/cp36-cp36m/bin/python3.6 ,
-          ]
+      #- os: linux
+      #  dist: xenial
+      #  services: docker
+      #  env: >
+      #    [
+      #    PYTHON_VERSION=3.6                                 ,
+      #    PYTHON_BINARY=/opt/python/cp36-cp36m/bin/python3.6 ,
+      #    ]
 
-      - os: linux
-        dist: xenial
-        services: docker
-        env: >
-          [
-          PYTHON_VERSION=3.7                                 ,
-          PYTHON_BINARY=/opt/python/cp37-cp37m/bin/python3.7 ,
-          ]
+      #- os: linux
+      #  dist: xenial
+      #  services: docker
+      #  env: >
+      #    [
+      #    PYTHON_VERSION=3.7                                 ,
+      #    PYTHON_BINARY=/opt/python/cp37-cp37m/bin/python3.7 ,
+      #    ]
 
-      - services: docker
-        env: >
-          [
-          PYTHON_VERSION=3.8                                 ,
-          PYTHON_BINARY=/opt/python/cp38-cp38/bin/python3.8 ,
-          ]
+      #- services: docker
+      #  env: >
+      #    [
+      #    PYTHON_VERSION=3.8                                 ,
+      #    PYTHON_BINARY=/opt/python/cp38-cp38/bin/python3.8 ,
+      #    ]
 
       - services: docker
         env: >
@@ -47,50 +47,50 @@ jobs:
           ]
 
         # OSX 10.12 - xcode 8.3 - Python 3.5
-      - os: osx
-        osx_image: xcode11
-        compiler: clang
-        env: >
-          [
-          CXX=clang++ ,
-          CC=clang     ,
-          PYTHON_VERSION=3.5   ,
-          ]
+        #- os: osx
+        #  osx_image: xcode11
+        #  compiler: clang
+        #  env: >
+        #    [
+        #    CXX=clang++ ,
+        #    CC=clang     ,
+        #    PYTHON_VERSION=3.5   ,
+        #    ]
 
 
-      # OSX 10.12 - xcode 8.3 - Python 3.6
-      - os: osx
-        osx_image: xcode11
-        compiler: clang
-        env: >
-          [
-          CXX=clang++ ,
-          CC=clang     ,
-          PYTHON_VERSION=3.6   ,
-          ]
+        ## OSX 10.12 - xcode 8.3 - Python 3.6
+        #- os: osx
+        #  osx_image: xcode11
+        #  compiler: clang
+        #  env: >
+        #    [
+        #    CXX=clang++ ,
+        #    CC=clang     ,
+        #    PYTHON_VERSION=3.6   ,
+        #    ]
 
 
-      # OSX 10.12 - xcode 10.1 - Python 3.7
-      - os: osx
-        osx_image: xcode11
-        compiler: clang
-        env: >
-          [
-          CXX=clang++ ,
-          CC=clang     ,
-          PYTHON_VERSION=3.7   ,
-          ]
+        ## OSX 10.12 - xcode 10.1 - Python 3.7
+        #- os: osx
+        #  osx_image: xcode11
+        #  compiler: clang
+        #  env: >
+        #    [
+        #    CXX=clang++ ,
+        #    CC=clang     ,
+        #    PYTHON_VERSION=3.7   ,
+        #    ]
 
-      # OSX 10.12 - xcode 10.1 - Python 3.8
-      - os: osx
-        osx_image: xcode11
-        compiler: clang
-        env: >
-          [
-          CXX=clang++ ,
-          CC=clang     ,
-          PYTHON_VERSION=3.8   ,
-          ]
+        ## OSX 10.12 - xcode 10.1 - Python 3.8
+        #- os: osx
+        #  osx_image: xcode11
+        #  compiler: clang
+        #  env: >
+        #    [
+        #    CXX=clang++ ,
+        #    CC=clang     ,
+        #    PYTHON_VERSION=3.8   ,
+        #    ]
 
       # OSX 10.12 - xcode 10.1 - Python 3.9
       - os: osx
@@ -149,7 +149,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.7" ]]; then pyenv install --skip-existing 3.7.0; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.8" ]]; then pyenv install --skip-existing 3.8.0; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.9" ]]; then pyenv install --skip-existing 3.9.0; fi
-  #- if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.7" ]]; then ls -alR $(pyenv root)/versions/3.7.0a1; fi
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "2.7" ]]; then export PYTHON_BINARY=$(pyenv root)/versions/2.7.12/bin/python2.7 ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYTHON_VERSION" == "3.5" ]]; then export PYTHON_BINARY=$(pyenv root)/versions/3.5.9/bin/python3.5  ;fi
