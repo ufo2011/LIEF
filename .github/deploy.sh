@@ -119,7 +119,7 @@ if [[ $new_branch == 1 ]]; then
 fi
 
 #git reset --soft `git rev-list --all | tail -1`
-git reset --soft ebacb6adf12a5866db66346ce591f634333bde24
+git reset --soft HEAD~1
 git ls-files -v
 
 mkdir -p lief && cd lief

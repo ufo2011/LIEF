@@ -69,6 +69,9 @@ jobs:
             -v $TRAVIS_BUILD_DIR:/src
             liefproject/manylinux1_x86_64
             bash /src/scripts/docker/travis-linux-sdk.sh
+          - >
+            sudo chmod -R 777 $TRAVIS_BUILD_DIR/build &&
+            sudo chown -R 1000:1000 $TRAVIS_BUILD_DIR/build
         after_success:
           - >
             if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
@@ -96,6 +99,9 @@ jobs:
             -v $TRAVIS_BUILD_DIR:/src
             liefproject/manylinux1_x86_64
             bash /src/scripts/docker/travis-linux.sh
+          - >
+            sudo chmod -R 777 $TRAVIS_BUILD_DIR/build &&
+            sudo chown -R 1000:1000 $TRAVIS_BUILD_DIR/build
         after_success:
           - >
             if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
