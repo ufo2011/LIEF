@@ -18,7 +18,7 @@ CPACK_CONFIG_PATH = (LIEF_SRC / "cmake" / "cpack.config.cmake").resolve()
 CMAKE_PATH = pathlib.Path(shutil.which("cmake.exe"))
 CPACK_PATH = CMAKE_PATH.parent / "cpack.exe"
 
-if CPACK_PATH.is_file():
+if not CPACK_PATH.is_file():
     print("Can't find cpack.exe at: {}".format(CPACK_PATH), file=sys.stderr)
     sys.exit(1)
 
