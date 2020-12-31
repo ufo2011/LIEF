@@ -269,7 +269,7 @@ before_install:
 
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PYTHON_CONFIGURE_OPTS="--enable-shared --enable-unicode=ucs2"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv root; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv update; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew upgrade pyenv; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv install --list  ;fi
 
 after_script:
