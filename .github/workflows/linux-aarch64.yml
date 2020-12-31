@@ -5,11 +5,12 @@ on: push
 jobs:
   linux-sdk:
     runs-on: ubuntu-latest
-    container: liefproject/manylinux2014-aarch64
-    env:
-      CCACHE_DIR: /ccache
-    volumes:
-      - $GITHUB_WORKSPACE:/src
+    container:
+      image: liefproject/manylinux2014-aarch64
+      env:
+        CCACHE_DIR: /ccache
+      volumes:
+        - $GITHUB_WORKSPACE:/src
     steps:
       - uses: actions/checkout@v2
       - name: Build

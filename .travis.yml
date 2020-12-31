@@ -218,7 +218,7 @@ jobs:
       - os: osx
         osx_image: xcode11
         compiler: clang
-        name: "OSX Python 3.8 | SDK"
+        name: "OSX Python 3.9 | SDK"
         script:
           - pyenv install --skip-existing 3.9.0
           - >
@@ -269,6 +269,7 @@ before_install:
 
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PYTHON_CONFIGURE_OPTS="--enable-shared --enable-unicode=ucs2"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv root; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv update; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pyenv install --list  ;fi
 
 after_script:
