@@ -1,5 +1,4 @@
 name: 'Linux AArch64'
-description: 'Build Python and SDK packages for Linux AArch64'
 on: push
 
 jobs:
