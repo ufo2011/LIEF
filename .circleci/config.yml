@@ -4,8 +4,8 @@ jobs:
     macos:
       xcode: 12.3.0
     steps:
-      - checkout
-        path : ~/LIEF
+      - checkout:
+          path: ~/LIEF
       - restore_cache:
         keys:
           - ccache-{{ arch }}-{{ .Branch }}
