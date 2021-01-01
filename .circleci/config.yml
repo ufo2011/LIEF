@@ -7,11 +7,11 @@ jobs:
       - checkout:
           path: ~/LIEF
       - restore_cache:
-        keys:
-          - ccache-{{ arch }}-{{ .Branch }}
-          - ccache-{{ arch }}-master
-          - ccache-{{ arch }}
-          - pyenv
+          keys:
+            - ccache-{{ arch }}-{{ .Branch }}
+            - ccache-{{ arch }}-master
+            - ccache-{{ arch }}
+            - pyenv
       - run:
           name: Install pyenv
           command: |

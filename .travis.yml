@@ -80,7 +80,7 @@ jobs:
             sudo python3 -m pip install --upgrade pip setuptools requests mako wheel &&
             export PYTHON_BINARY=python3 &&
             cd $TRAVIS_BUILD_DIR &&
-            python3 .github/deploy.py
+            python3 .github/deploy.py;
             fi
           - >
             if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]];
@@ -110,7 +110,7 @@ jobs:
             sudo python3 -m pip install --upgrade pip setuptools requests mako wheel &&
             export PYTHON_BINARY=python3 &&
             cd $TRAVIS_BUILD_DIR &&
-            python3 .github/deploy.py
+            python3 .github/deploy.py;
             fi
 
       #- services: docker

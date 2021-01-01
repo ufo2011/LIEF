@@ -28,9 +28,10 @@ def is_pr(ci):
         cond2 = not os.getenv("TRAVIS_REPO_SLUG", "").startswith("lief-project/")
         return cond1 or cond2
     elif ci == CI.APPVEYOR:
+        logger.info("%s - %s", os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1), os.getenv("APPVEYOR_PROJECT_SLUG", ""))
         cond1 = int(os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1)) >= 0
-        cond2 = not os.getenv("APPVEYOR_PROJECT_SLUG", "").startswith("lief-project/")
-        return cond1 or cond2
+        cond2 = not os.getenv("APPVEYOR_PROJECT_SLUG", "").startswith("lief-project")
+        return False # TODO(romain):Fix
     elif ci == CI.CIRCLE_CI:
         cond1 = int(os.getenv("CIRCLE_PR_NUMBER", -1)) >= 0
         cond2 = os.getenv("CIRCLE_PROJECT_USERNAME", "") != "lief-project"
