@@ -95,7 +95,7 @@ build_script:
 after_build:
   - ps: Get-Service -Name 'ssh-agent' | Set-Service -StartupType Manual
   - ps: Start-Service -Name 'ssh-agent'
-  - bash ./.github/deploy.sh
+  - python.exe .github\deploy.py
 
 on_finish:
   - cmd: sccache.exe --stop-server
