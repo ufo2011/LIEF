@@ -310,7 +310,7 @@ if p.returncode:
 
 
 for i in range(10):
-    p = subprocess.Popen("{} push --force {} master".format(GIT, LIEF_PACKAGE_SSH_REPO),
+    p = subprocess.Popen("{} push --force {} {}".format(GIT, LIEF_PACKAGE_SSH_REPO, target_branch),
             shell=True, cwd=LIEF_PACKAGE_DIR)
     p.wait()
 

@@ -14,7 +14,7 @@ jobs:
       - name: ccache cache files
         uses: actions/cache@v1.1.0
         with:
-          path: .ccache
+          path: ~/.ccache
           key: linux-aarch64-${{ runner.os }}-${{ steps.get-date.outputs.date }}
           restore-keys: |
               linux-aarch64-${{ runner.os }}-
