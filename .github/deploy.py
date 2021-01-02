@@ -314,29 +314,28 @@ for cmd in cmds:
     if p.returncode:
         sys.exit(1)
 
-for i in range(10):
-    p = subprocess.Popen("{} push --force {} {}".format(GIT, LIEF_PACKAGE_SSH_REPO, target_branch),
-            shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
-    p.wait()
+#for i in range(10):
+#    p = subprocess.Popen("{} push --force {} {}".format(GIT, LIEF_PACKAGE_SSH_REPO, target_branch),
+#            shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
+#    p.wait()
+#
+#    if p.returncode == 0:
+#        break
+#
+#    cmds = [
+#        "{} branch -a -v".format(GIT),
+#        "{} fetch -v origin {}".format(GIT, target_branch),
+#        "{} branch -a -v".format(GIT),
+#        "{} rebase -s recursive -X theirs FETCH_HEAD".format(GIT),
+#        "{} branch -a -v".format(GIT),
+#    ]
+#    for c in cmds:
+#        p = subprocess.Popen(c, shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
+#        p.wait()
+#else:
+#    logger.critical("Can't push file on %s -> %s", LIEF_PACKAGE_SSH_REPO, target_branch)
+#    sys.exit(1)
 
-    if p.returncode == 0:
-        break
 
-    cmds = [
-        "{} branch -a -v".format(GIT),
-        "{} fetch -v origin {}".format(GIT, target_branch),
-        "{} branch -a -v".format(GIT),
-        "{} rebase -s recursive -X theirs FETCH_HEAD".format(GIT),
-        "{} branch -a -v".format(GIT),
-    ]
-    for c in cmds:
-        p = subprocess.Popen(c, shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
-        p.wait()
-else:
-    logger.critical("Can't push file on %s -> %s", LIEF_PACKAGE_SSH_REPO, target_branch)
-    sys.exit(1)
-
-
-output_key_path.unlink()
+#output_key_path.unlink()
 print("ok")
-sys.exit(0)
