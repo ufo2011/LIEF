@@ -339,3 +339,4 @@ else:
 
 output_key_path.unlink()
 print("ok")
+sys.exit(0)
