@@ -111,10 +111,10 @@ after_build:
         -e LIEF_AUTOMATIC_BUILDS_KEY="$env:LIEF_AUTOMATIC_BUILDS_KEY" `
         -e LIEF_AUTOMATIC_BUILDS_IV="$env:LIEF_AUTOMATIC_BUILDS_IV" `
         --rm `
-        liefproject/deploy python3 /src/.github/deploy.py; exit 0
+        liefproject/deploy python3 /src/.github/deploy.py
 
-on_finish:
-  - cmd: sccache.exe --stop-server
+#on_finish:
+#  - cmd: sccache.exe --stop-server
 
 artifacts:
   - path: 'dist\*.whl'

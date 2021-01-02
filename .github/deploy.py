@@ -312,6 +312,7 @@ for cmd in cmds:
     p.wait()
 
     if p.returncode:
+        logger.error("Error while running %s", cmd)
         sys.exit(1)
 
 #for i in range(10):
@@ -337,5 +338,8 @@ for cmd in cmds:
 #    sys.exit(1)
 
 
-#output_key_path.unlink()
+#output_key_path.unlink(missing_ok=True)
 print("ok")
+
+if __name__ == "__main__":
+    sys.exit(0)
