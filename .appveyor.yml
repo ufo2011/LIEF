@@ -99,7 +99,7 @@ after_build:
   - ps: Get-Service -Name 'ssh-agent' | Set-Service -StartupType Manual
   - ps: Start-Service -Name 'ssh-agent'
   - ps: |
-      docker run \
+      docker run `
         -v $env:APPVEYOR_BUILD_FOLDER:/src `
         -e APPVEYOR="true" `
         -e APPVEYOR_PULL_REQUEST_NUMBER=$env:APPVEYOR_PULL_REQUEST_NUMBER `
