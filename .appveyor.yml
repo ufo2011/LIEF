@@ -99,17 +99,17 @@ after_build:
   - ps: Get-Service -Name 'ssh-agent' | Set-Service -StartupType Manual
   - ps: Start-Service -Name 'ssh-agent'
   - cd %APPVEYOR_BUILD_FOLDER%
-  - ps: |
-      docker run `
-        -v ${PWD}:/src `
-        -e APPVEYOR="true"`
-        -e APPVEYOR_PULL_REQUEST_NUMBER="$env:APPVEYOR_PULL_REQUEST_NUMBER" `
-        -e APPVEYOR_REPO_NAME="$env:APPVEYOR_REPO_NAME" `
-        -e APPVEYOR_REPO_BRANCH="$env:APPVEYOR_REPO_BRANCH" `
-        -e APPVEYOR_BUILD_FOLDER="$env:APPVEYOR_BUILD_FOLDER" `
-        -e LIEF_AUTOMATIC_BUILDS_KEY="$env:LIEF_AUTOMATIC_BUILDS_KEY" `
-        -e LIEF_AUTOMATIC_BUILDS_IV="$env:LIEF_AUTOMATIC_BUILDS_IV" `
-        --rm `
+  - cmd: |
+      docker run ^
+        -v %APPVEYOR_BUILD_FOLDER%:/src ^
+        -e APPVEYOR="true" ^
+        -e APPVEYOR_PULL_REQUEST_NUMBER=%APPVEYOR_PULL_REQUEST_NUMBER% ^
+        -e APPVEYOR_REPO_NAME=%APPVEYOR_REPO_NAME% ^
+        -e APPVEYOR_REPO_BRANCH=%APPVEYOR_REPO_BRANCH% ^
+        -e APPVEYOR_BUILD_FOLDER=%APPVEYOR_BUILD_FOLDER% ^
+        -e LIEF_AUTOMATIC_BUILDS_KEY=%LIEF_AUTOMATIC_BUILDS_KEY% ^
+        -e LIEF_AUTOMATIC_BUILDS_IV=%LIEF_AUTOMATIC_BUILDS_IV% ^
+        --rm ^
         liefproject/deploy python3 /src/.github/deploy.py
 
 on_finish:
