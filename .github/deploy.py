@@ -52,7 +52,7 @@ def get_branch(ci):
     elif ci == CI.CIRCLE_CI:
         return os.getenv("CIRCLE_BRANCH")
     elif ci == CI.GITHUB_ACTIONS:
-        return os.getenv("GITHUB_REF")
+        return os.getenv("GITHUB_REF").replace("refs/heads/", "")
     elif ci == CI.LOCAL:
         return os.getenv("CI_BRANCH")
     return None
@@ -180,6 +180,7 @@ if not LIEF_PACKAGE_DIR.is_dir():
 SDK_PACKAGE_DIR.mkdir(exist_ok=True)
 PYPI_PACKAGE_DIR.mkdir(exist_ok=True)
 
+logger.info("CI: %s - %s", GIT_USER, GIT_EMAIL)
 cmds = [
     #"chmod 700 .git",
     "{} config user.name '{}'".format(GIT, GIT_USER),
@@ -308,7 +309,6 @@ p.wait()
 if p.returncode:
     sys.exit(1)
 
-
 for i in range(10):
     p = subprocess.Popen("{} push --force {} {}".format(GIT, LIEF_PACKAGE_SSH_REPO, target_branch),
             shell=True, cwd=LIEF_PACKAGE_DIR)
@@ -327,6 +327,10 @@ for i in range(10):
     for c in cmds:
         p = subprocess.Popen(c, shell=True, cwd=LIEF_PACKAGE_DIR)
         p.wait()
+else:
+    logger.critical("Can't push file on %s -> %s", LIEF_PACKAGE_SSH_REPO, target_branch)
+    sys.exit(1)
+
 
 output_key_path.unlink()
 print("ok")
