@@ -77,7 +77,7 @@ def get_ci_workdir(ci):
 
 LOG_LEVEL = logging.DEBUG
 
-logging.getLogger().addHandler(logging.StreamHandler())
+logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
 logging.getLogger().setLevel(LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
@@ -104,6 +104,7 @@ logger.info("CI: %s", pretty_ci_name(CURRENT_CI))
 
 ALLOWED_BRANCHES = {"master", "deploy", "devel", "enhancement/cpack"}
 BRANCH_NAME = get_branch(CURRENT_CI)
+logger.info("Branch: %s", BRANCH_NAME)
 if BRANCH_NAME not in ALLOWED_BRANCHES:
     logger.info("Skip deployment for branch '%s'", BRANCH_NAME)
     sys.exit(0)
