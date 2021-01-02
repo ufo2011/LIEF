@@ -44,16 +44,8 @@ jobs:
           LIEF_AUTOMATIC_BUILDS_IV: ${{ secrets.LIEF_AUTOMATIC_BUILDS_IV }}
         shell: bash
         run: |
-          docker run \
-            -v $GITHUB_WORKSPACE:/src \
-            -e GITHUB_ACTIONS="true" \
-            -e GITHUB_WORKSPACE=$GITHUB_WORKSPACE \
-            -e GITHUB_REF=$GITHUB_REF \
-            -e GITHUB_REPOSITORY=$GITHUB_REPOSITORY \
-            -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
-            -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
-            --rm \
-            liefproject/deploy python3 /src/.github/deploy.py
+          python -m pip install --upgrade requests mako
+          python .github/deploy.py
 
 
 
