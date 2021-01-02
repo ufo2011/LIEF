@@ -101,7 +101,7 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - cmd: |
       docker run `
-        -v %APPVEYOR_BUILD_FOLDER%:/src `
+        -v ${PWD}:/src `
         -e APPVEYOR="true" `
         -e APPVEYOR_PULL_REQUEST_NUMBER="$env:APPVEYOR_PULL_REQUEST_NUMBER" `
         -e APPVEYOR_REPO_NAME="$env:APPVEYOR_REPO_NAME" `
