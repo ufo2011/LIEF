@@ -6,8 +6,7 @@ git:
 jobs:
     include:
       #- if: branch = master #AND tag IS present AND type = push
-      - if: type = push
-        services: docker
+      - services: docker
         name: "Linux Python 3.5"
         script:
           - >
@@ -35,8 +34,7 @@ jobs:
 
 
       #- if: branch = master AND tag IS present AND type = push
-      - if: type = push
-        services: docker
+      - services: docker
         name: "Linux Python 3.6"
         script:
           - >
