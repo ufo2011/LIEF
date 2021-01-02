@@ -112,6 +112,7 @@ after_build:
         -e LIEF_AUTOMATIC_BUILDS_IV="$env:LIEF_AUTOMATIC_BUILDS_IV" `
         --rm `
         liefproject/deploy python3 /src/.github/deploy.py
+      if ($lastexitcode -ne 0){ exit $lastexitcode }
 
 on_finish:
   - cmd: sccache.exe --stop-server
