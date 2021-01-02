@@ -173,7 +173,7 @@ if DEPLOY_IV is None:
 target_branch = "gh-pages-test"
 if not LIEF_PACKAGE_DIR.is_dir():
     cmd = "{} clone --branch={} -j8 --single-branch {} {}".format(GIT, target_branch, LIEF_PACKAGE_REPO, LIEF_PACKAGE_DIR)
-    p = subprocess.Popen(cmd, shell=True, cwd=REPODIR)
+    p = subprocess.Popen(cmd, shell=True, cwd=REPODIR, stderr=subprocess.STDOUT)
     p.wait()
 
     if p.returncode:
@@ -237,22 +237,6 @@ html = Template(INDEX_TEMPLATE).render(names=fnames, base_url=BASE_URL, base="pa
 with open((SDK_PACKAGE_DIR / "index.html").as_posix(), "w") as f:
     f.write(html)
 
-cmds = [
-    #f"{GIT} diff --cached --exit-code --quiet",
-    "chown -R 1000:1000 *",
-    "{} add .".format(GIT),
-    "{} commit -m 'Automatic build'".format(GIT),
-    "{} ls-files -v".format(GIT),
-    #f"{GIT} log --pretty=fuller",
-]
-
-for cmd in cmds:
-    logger.info("Running %s", cmd)
-    p = subprocess.Popen(cmd, shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
-    p.wait()
-
-    if p.returncode:
-        sys.exit(1)
 
 
 if not SSH_DIR.is_dir():
@@ -280,7 +264,7 @@ if p.returncode:
 output_key_path.chmod(0o600)
 print(output_key_path)
 
-process = subprocess.run(SSH_AGENT, stdout=subprocess.PIPE, universal_newlines=True)
+process = subprocess.run(SSH_AGENT, stdout=subprocess.PIPE, universal_newlines=True, stderr=subprocess.STDOUT)
 OUTPUT_PATTERN = re.compile(r'SSH_AUTH_SOCK=(?P<socket>[^;]+).*SSH_AGENT_PID=(?P<pid>\d+)', re.MULTILINE | re.DOTALL)
 match = OUTPUT_PATTERN.search(process.stdout)
 if match is None:
@@ -294,15 +278,16 @@ logger.info('Exporting ssh agent environment variables' )
 os.environ['SSH_AUTH_SOCK'] = agent_data['socket']
 os.environ['SSH_AGENT_PID'] = agent_data['pid']
 
-process = subprocess.run([SSH_ADD, output_key_path])
+process = subprocess.run([SSH_ADD, output_key_path], stderr=subprocess.STDOUT)
 if process.returncode != 0:
     raise Exception(f'Failed to add the key: {output_key_path}')
 known_hosts = (SSH_DIR / "known_hosts").as_posix()
 cmd = "{} -H github.com >> {}".format(SSH_KEYSCAN, known_hosts)
 
 kwargs = {
-    'shell': True,
-    'cwd':   REPODIR,
+    'shell':  True,
+    'cwd':    REPODIR,
+    'stderr': subprocess.STDOUT,
 }
 
 p = subprocess.Popen(cmd, **kwargs)
@@ -311,9 +296,27 @@ p.wait()
 if p.returncode:
     sys.exit(1)
 
+
+cmds = [
+    #f"{GIT} diff --cached --exit-code --quiet",
+    "chown -R 1000:1000 *",
+    "{} add .".format(GIT),
+    "{} commit -m 'Automatic build'".format(GIT),
+    "{} ls-files -v".format(GIT),
+    #f"{GIT} log --pretty=fuller",
+]
+
+for cmd in cmds:
+    logger.info("Running %s", cmd)
+    p = subprocess.Popen(cmd, shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
+    p.wait()
+
+    if p.returncode:
+        sys.exit(1)
+
 for i in range(10):
     p = subprocess.Popen("{} push --force {} {}".format(GIT, LIEF_PACKAGE_SSH_REPO, target_branch),
-            shell=True, cwd=LIEF_PACKAGE_DIR)
+            shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
     p.wait()
 
     if p.returncode == 0:
@@ -327,7 +330,7 @@ for i in range(10):
         "{} branch -a -v".format(GIT),
     ]
     for c in cmds:
-        p = subprocess.Popen(c, shell=True, cwd=LIEF_PACKAGE_DIR)
+        p = subprocess.Popen(c, shell=True, cwd=LIEF_PACKAGE_DIR, stderr=subprocess.STDOUT)
         p.wait()
 else:
     logger.critical("Can't push file on %s -> %s", LIEF_PACKAGE_SSH_REPO, target_branch)
