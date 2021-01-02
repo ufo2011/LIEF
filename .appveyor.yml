@@ -92,16 +92,16 @@ install:
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-  - python.exe .\setup.py --ninja --lief-test bdist_wheel && exit 0 # Ignore warnings...
-  - ps: if ($env:PYTHON_VERSION -eq "3.9") { python.exe .\scripts\windows\package_sdk.py  }
+  #- python.exe .\setup.py --ninja --lief-test bdist_wheel && exit 0 # Ignore warnings...
+  #- ps: if ($env:PYTHON_VERSION -eq "3.9") { python.exe .\scripts\windows\package_sdk.py  }
 
 after_build:
   - ps: Get-Service -Name 'ssh-agent' | Set-Service -StartupType Manual
   - ps: Start-Service -Name 'ssh-agent'
   - ps: |
       docker run `
-        -v $env:APPVEYOR_BUILD_FOLDER:/src `
-        -e APPVEYOR="true" `
+        -v "$env:APPVEYOR_BUILD_FOLDER":/src `
+        -e APPVEYOR="true"`
         -e APPVEYOR_PULL_REQUEST_NUMBER=$env:APPVEYOR_PULL_REQUEST_NUMBER `
         -e APPVEYOR_REPO_NAME=$env:APPVEYOR_REPO_NAME `
         -e APPVEYOR_REPO_BRANCH=$env:APPVEYOR_REPO_BRANCH `
