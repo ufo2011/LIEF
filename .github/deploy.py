@@ -31,7 +31,7 @@ def is_pr(ci):
         logger.info("%s - %s", os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1), os.getenv("APPVEYOR_REPO_NAME", ""))
         cond1 = int(os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1)) >= 0
         cond2 = not os.getenv("APPVEYOR_REPO_NAME", "").startswith("lief-project/")
-        return False # TODO(romain):Fix
+        return cond1 or cond2
     elif ci == CI.CIRCLE_CI:
         cond1 = int(os.getenv("CIRCLE_PR_NUMBER", -1)) >= 0
         cond2 = os.getenv("CIRCLE_PROJECT_USERNAME", "") != "lief-project"
