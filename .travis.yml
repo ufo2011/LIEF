@@ -72,19 +72,26 @@ jobs:
           - >
             sudo chmod -R 777 $TRAVIS_BUILD_DIR/build &&
             sudo chown -R 1000:1000 $TRAVIS_BUILD_DIR/build
-        after_success:
           - >
             if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
-            sudo apt-get update &&
-            sudo apt-get install -y python3 python3-pip &&
-            sudo python3 -m pip install --upgrade pip setuptools requests mako wheel &&
-            export PYTHON_BINARY=python3 &&
-            cd $TRAVIS_BUILD_DIR &&
-            python3 .github/deploy.py;
+            docker run \
+              -v $TRAVIS_BUILD_DIR:/src \
+              -e TRAVIS="true" \
+              -e TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE \
+              -e TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG \
+              -e TRAVIS_BRANCH=$TRAVIS_BRANCH \
+              -e TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR \
+              -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
+              -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
+              --rm \
+              liefproject/deploy python3 /src/.github/deploy.py;
             fi
           - >
             if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]];
-            then docker run --rm -e CIRCLE_CI_TOKEN=$CIRCLE_CI_TOKEN liefproject/manylinux1_x86_64
+            then
+            docker run --rm
+            -e CIRCLE_CI_TOKEN=$CIRCLE_CI_TOKEN
+            liefproject/manylinux1_x86_64
             bash -c "curl --request POST --url https://circleci.com/api/v2/project/gh/lief-project/doc/pipeline --header 'Circle-Token: ${CIRCLE_CI_TOKEN}' --header 'content-type: application/json'";
             fi
 
@@ -102,7 +109,6 @@ jobs:
           - >
             sudo chmod -R 777 $TRAVIS_BUILD_DIR/build &&
             sudo chown -R 1000:1000 $TRAVIS_BUILD_DIR/build
-        after_success:
           - >
             if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
             sudo apt-get update &&

@@ -28,9 +28,9 @@ def is_pr(ci):
         cond2 = not os.getenv("TRAVIS_REPO_SLUG", "").startswith("lief-project/")
         return cond1 or cond2
     elif ci == CI.APPVEYOR:
-        logger.info("%s - %s", os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1), os.getenv("APPVEYOR_PROJECT_SLUG", ""))
+        logger.info("%s - %s", os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1), os.getenv("APPVEYOR_REPO_NAME", ""))
         cond1 = int(os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1)) >= 0
-        cond2 = not os.getenv("APPVEYOR_PROJECT_SLUG", "").startswith("lief-project")
+        cond2 = not os.getenv("APPVEYOR_REPO_NAME", "").startswith("lief-project/")
         return False # TODO(romain):Fix
     elif ci == CI.CIRCLE_CI:
         cond1 = int(os.getenv("CIRCLE_PR_NUMBER", -1)) >= 0
@@ -117,11 +117,11 @@ REPODIR    = CURRENTDIR.parent
 DEPLOY_KEY = os.getenv("LIEF_AUTOMATIC_BUILDS_KEY", None)
 DEPLOY_IV  = os.getenv("LIEF_AUTOMATIC_BUILDS_IV", None)
 
-if DEPLOY_KEY is None:
+if DEPLOY_KEY is None or len(DEPLOY_KEY) == 0:
     print("Deploy key is not set!", file=sys.stderr)
     sys.exit(1)
 
-if DEPLOY_IV is None:
+if DEPLOY_IV is None or len(DEPLOY_IV) == 0:
     print("Deploy IV is not set!", file=sys.stderr)
     sys.exit(1)
 
@@ -139,8 +139,8 @@ LIEF_PACKAGE_DIR      = REPODIR / "deploy-packages"
 LIEF_PACKAGE_SSH_REPO = "git@github.com:lief-project/packages.git"
 SDK_PACKAGE_DIR       = LIEF_PACKAGE_DIR / "sdk"
 PYPI_PACKAGE_DIR      = LIEF_PACKAGE_DIR / "lief"
-DIST_DIR              = CI_CWD / "dist"
-BUILD_DIR             = CI_CWD / "build"
+DIST_DIR              = REPODIR / "dist"
+BUILD_DIR             = REPODIR / "build"
 
 
 logger.debug("Working directory: %s", CI_CWD)
@@ -170,8 +170,8 @@ if DEPLOY_IV is None:
 #####################
 target_branch = "gh-pages-test"
 if not LIEF_PACKAGE_DIR.is_dir():
-    p = subprocess.Popen(f"{GIT} clone --branch={target_branch} -j8 --single-branch {LIEF_PACKAGE_REPO} {LIEF_PACKAGE_DIR}",
-            shell=True, cwd=REPODIR)
+    cmd = "{} clone --branch={} -j8 --single-branch {} {}".format(GIT, target_branch, LIEF_PACKAGE_REPO, LIEF_PACKAGE_DIR)
+    p = subprocess.Popen(cmd, shell=True, cwd=REPODIR)
     p.wait()
 
     if p.returncode:
@@ -182,10 +182,10 @@ PYPI_PACKAGE_DIR.mkdir(exist_ok=True)
 
 cmds = [
     #"chmod 700 .git",
-    f"{GIT} config user.name '{GIT_USER}'",
-    f"{GIT} config user.email '{GIT_EMAIL}'",
-    f"{GIT} reset --soft HEAD~1",
-    f"{GIT} ls-files -v",
+    "{} config user.name '{}'".format(GIT, GIT_USER),
+    "{} config user.email '{}'".format(GIT, GIT_EMAIL),
+    "{} reset --soft ROOT".format(GIT),
+    "{} ls-files -v".format(GIT),
 ]
 
 for cmd in cmds:
@@ -236,9 +236,10 @@ with open((SDK_PACKAGE_DIR / "index.html").as_posix(), "w") as f:
 
 cmds = [
     #f"{GIT} diff --cached --exit-code --quiet",
-    f"{GIT} add .",
-    f"{GIT} commit -m 'Automatic build'",
-    f"{GIT} ls-files -v",
+    "chown -R 1000:1000 *",
+    "{} add .".format(GIT),
+    "{} commit -m 'Automatic build'".format(GIT),
+    "{} ls-files -v".format(GIT),
     #f"{GIT} log --pretty=fuller",
 ]
 
@@ -257,7 +258,8 @@ if not SSH_DIR.is_dir():
 #fix_ssh_perms()
 deploy_key_path = (REPODIR / ".github" / "deploy-key.enc").as_posix()
 output_key_path = (REPODIR / ".git" / "deploy-key")
-cmd = f"{OPENSSL} aes-256-cbc -K {DEPLOY_KEY} -iv {DEPLOY_IV} -in {deploy_key_path} -out {output_key_path.as_posix()} -d"
+cmd = "{} aes-256-cbc -K {} -iv {} -in {} -out {} -d".format(
+        OPENSSL, DEPLOY_KEY, DEPLOY_IV, deploy_key_path, output_key_path.as_posix())
 
 kwargs = {
     'shell': True,
@@ -293,11 +295,11 @@ process = subprocess.run([SSH_ADD, output_key_path])
 if process.returncode != 0:
     raise Exception(f'Failed to add the key: {output_key_path}')
 known_hosts = (SSH_DIR / "known_hosts").as_posix()
-cmd = f"{SSH_KEYSCAN} -H github.com >> {known_hosts}"
+cmd = "{} -H github.com >> {}".format(SSH_KEYSCAN, known_hosts)
 
 kwargs = {
     'shell': True,
-    'wd':   REPODIR,
+    'cwd':   REPODIR,
 }
 
 p = subprocess.Popen(cmd, **kwargs)
@@ -308,18 +310,19 @@ if p.returncode:
 
 
 for i in range(10):
-    p = subprocess.Popen(f"{GIT} push --force {LIEF_PACKAGE_SSH_REPO} master", shell=True, cwd=LIEF_PACKAGE_DIR)
+    p = subprocess.Popen("{} push --force {} master".format(GIT, LIEF_PACKAGE_SSH_REPO),
+            shell=True, cwd=LIEF_PACKAGE_DIR)
     p.wait()
 
     if p.returncode == 0:
         break
 
     cmds = [
-        f"{GIT} branch -a -v",
-        f"{GIT} fetch -v origin master",
-        f"{GIT} branch -a -v",
-        f"{GIT} rebase -s recursive -X theirs FETCH_HEAD",
-        f"{GIT} branch -a -v",
+        "{} branch -a -v".format(GIT),
+        "{} fetch -v origin master".format(GIT),
+        "{} branch -a -v".format(GIT),
+        "{} rebase -s recursive -X theirs FETCH_HEAD".format(GIT),
+        "{} branch -a -v".format(GIT),
     ]
     for c in cmds:
         p = subprocess.Popen(c, shell=True, cwd=LIEF_PACKAGE_DIR)
