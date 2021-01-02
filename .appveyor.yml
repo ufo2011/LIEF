@@ -4,6 +4,9 @@ clone_folder: c:\projects\lief
 
 configuration: Release
 
+services:
+- docker
+
 platform:
 - x86
 - x64
@@ -95,18 +98,18 @@ build_script:
 after_build:
   - ps: Get-Service -Name 'ssh-agent' | Set-Service -StartupType Manual
   - ps: Start-Service -Name 'ssh-agent'
-  - >
-    docker run \
-      -v $APPVEYOR_BUILD_FOLDER:/src \
-      -e APPVEYOR="true" \
-      -e APPVEYOR_PULL_REQUEST_NUMBER=$APPVEYOR_PULL_REQUEST_NUMBER \
-      -e APPVEYOR_REPO_NAME=$APPVEYOR_REPO_NAME \
-      -e APPVEYOR_REPO_BRANCH=$APPVEYOR_REPO_BRANCH \
-      -e APPVEYOR_BUILD_FOLDER=$APPVEYOR_BUILD_FOLDER \
-      -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
-      -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
-      --rm \
-      liefproject/deploy python3 /src/.github/deploy.py
+  - sh: |-
+      docker run \
+        -v $APPVEYOR_BUILD_FOLDER:/src \
+        -e APPVEYOR="true" \
+        -e APPVEYOR_PULL_REQUEST_NUMBER=$APPVEYOR_PULL_REQUEST_NUMBER \
+        -e APPVEYOR_REPO_NAME=$APPVEYOR_REPO_NAME \
+        -e APPVEYOR_REPO_BRANCH=$APPVEYOR_REPO_BRANCH \
+        -e APPVEYOR_BUILD_FOLDER=$APPVEYOR_BUILD_FOLDER \
+        -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
+        -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
+        --rm \
+        liefproject/deploy python3 /src/.github/deploy.py
 
 on_finish:
   - cmd: sccache.exe --stop-server

@@ -184,7 +184,7 @@ cmds = [
     #"chmod 700 .git",
     "{} config user.name '{}'".format(GIT, GIT_USER),
     "{} config user.email '{}'".format(GIT, GIT_EMAIL),
-    "{} reset --soft ROOT".format(GIT),
+    "{} reset --soft root".format(GIT),
     "{} ls-files -v".format(GIT),
 ]
 
