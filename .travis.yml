@@ -5,50 +5,60 @@ git:
 
 jobs:
     include:
-      #- if: branch = master AND tag IS present AND type = push
-      #  services: docker
-      #  script:
-      #    - >
-      #      docker run --name lief_35
-      #      -e PYTHON_BINARY=/opt/python/cp35-cp35m/bin/python3.5
-      #      -e CCACHE_DIR=/ccache
-      #      -v $HOME/.ccache:/ccache
-      #      -v $TRAVIS_BUILD_DIR:/src
-      #      liefproject/manylinux1_x86_64
-      #      bash /src/scripts/docker/travis-linux.sh
-      #  after_success:
-      #    - >
-      #      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
-      #      sudo apt-get update &&
-      #      sudo apt-get install -y python3 python3-pip &&
-      #      sudo python3 -m pip install --upgrade pip setuptools requests mako wheel &&
-      #      export PYTHON_BINARY=python3 &&
-      #      cd $TRAVIS_BUILD_DIR &&
-      #      bash ./.github/deploy.sh;
-      #      fi
+      #- if: branch = master #AND tag IS present AND type = push
+      - if: type = push
+        services: docker
+        script:
+          - >
+            docker run --name lief_35
+            -e PYTHON_BINARY=/opt/python/cp35-cp35m/bin/python3.5
+            -e CCACHE_DIR=/ccache
+            -v $HOME/.ccache:/ccache
+            -v $TRAVIS_BUILD_DIR:/src
+            liefproject/manylinux1_x86_64
+            bash /src/scripts/docker/travis-linux.sh
+          - >
+            if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
+            docker run \
+              -v $TRAVIS_BUILD_DIR:/src \
+              -e TRAVIS="true" \
+              -e TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE \
+              -e TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG \
+              -e TRAVIS_BRANCH=$TRAVIS_BRANCH \
+              -e TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR \
+              -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
+              -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
+              --rm \
+              liefproject/deploy python3 /src/.github/deploy.py;
+            fi
 
 
       #- if: branch = master AND tag IS present AND type = push
-      #  services: docker
-      #  script:
-      #    - >
-      #      docker run --name lief_36
-      #      -e PYTHON_BINARY=/opt/python/cp36-cp36m/bin/python3.6
-      #      -e CCACHE_DIR=/ccache
-      #      -v $HOME/.ccache:/ccache
-      #      -v $TRAVIS_BUILD_DIR:/src
-      #      liefproject/manylinux1_x86_64
-      #      bash /src/scripts/docker/travis-linux.sh
-      #  after_success:
-      #    - >
-      #      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
-      #      sudo apt-get update &&
-      #      sudo apt-get install -y python3 python3-pip &&
-      #      sudo python3 -m pip install --upgrade pip setuptools requests mako wheel &&
-      #      export PYTHON_BINARY=python3 &&
-      #      cd $TRAVIS_BUILD_DIR &&
-      #      bash ./.github/deploy.sh;
-      #      fi
+      - if: type = push
+        services: docker
+        script:
+          - >
+            docker run --name lief_36
+            -e PYTHON_BINARY=/opt/python/cp36-cp36m/bin/python3.6
+            -e CCACHE_DIR=/ccache
+            -v $HOME/.ccache:/ccache
+            -v $TRAVIS_BUILD_DIR:/src
+            liefproject/manylinux1_x86_64
+            bash /src/scripts/docker/travis-linux.sh
+          - >
+            if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
+            docker run \
+              -v $TRAVIS_BUILD_DIR:/src \
+              -e TRAVIS="true" \
+              -e TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE \
+              -e TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG \
+              -e TRAVIS_BRANCH=$TRAVIS_BRANCH \
+              -e TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR \
+              -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
+              -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
+              --rm \
+              liefproject/deploy python3 /src/.github/deploy.py;
+            fi
 
       - services: docker
         name: "Linux Python 3.7 | SDK | Doc Trigger"
@@ -124,27 +134,34 @@ jobs:
               --rm \
               liefproject/deploy python3 /src/.github/deploy.py;
             fi
-
-      #- services: docker
-      #  script:
-      #    - >
-      #      docker run --name lief_39
-      #      -e PYTHON_BINARY=/opt/python/cp39-cp39/bin/python3.9
-      #      -e CCACHE_DIR=/ccache
-      #      -v $HOME/.ccache:/ccache
-      #      -v $TRAVIS_BUILD_DIR:/src
-      #      liefproject/manylinux1_x86_64
-      #      bash /src/scripts/docker/travis-linux.sh
-      #  after_success:
-      #    - >
-      #      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
-      #      sudo apt-get update &&
-      #      sudo apt-get install -y python3 python3-pip &&
-      #      sudo python3 -m pip install --upgrade pip setuptools requests mako wheel &&
-      #      export PYTHON_BINARY=python3 &&
-      #      cd $TRAVIS_BUILD_DIR &&
-      #      bash ./.github/deploy.sh;
-      #      fi
+      - services: docker
+        name: "Linux Python 3.9"
+        script:
+          - >
+            docker run --name lief_39
+            -e PYTHON_BINARY=/opt/python/cp39-cp39/bin/python3.9
+            -e CCACHE_DIR=/ccache
+            -v $HOME/.ccache:/ccache
+            -v $TRAVIS_BUILD_DIR:/src
+            liefproject/manylinux1_x86_64
+            bash /src/scripts/docker/travis-linux.sh
+          - >
+            sudo chmod -R 777 $TRAVIS_BUILD_DIR/build &&
+            sudo chown -R 1000:1000 $TRAVIS_BUILD_DIR/build
+          - >
+            if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
+            docker run \
+              -v $TRAVIS_BUILD_DIR:/src \
+              -e TRAVIS="true" \
+              -e TRAVIS_EVENT_TYPE=$TRAVIS_EVENT_TYPE \
+              -e TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG \
+              -e TRAVIS_BRANCH=$TRAVIS_BRANCH \
+              -e TRAVIS_BUILD_DIR=$TRAVIS_BUILD_DIR \
+              -e LIEF_AUTOMATIC_BUILDS_KEY=$LIEF_AUTOMATIC_BUILDS_KEY \
+              -e LIEF_AUTOMATIC_BUILDS_IV=$LIEF_AUTOMATIC_BUILDS_IV \
+              --rm \
+              liefproject/deploy python3 /src/.github/deploy.py;
+            fi
 
       ## macOS 10.14.6 - xcode 11 - Python 3.5
       #- if: branch = master AND tag IS present AND type = push
