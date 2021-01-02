@@ -29,7 +29,8 @@ def is_pr(ci):
         return cond1 or cond2
     elif ci == CI.APPVEYOR:
         logger.info("%s - %s", os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1), os.getenv("APPVEYOR_REPO_NAME", ""))
-        cond1 = int(os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", -1)) >= 0
+        pr_number = os.getenv("APPVEYOR_PULL_REQUEST_NUMBER", "")
+        cond1 = len(pr_number) != 0 and int(pr_number) >= 0
         cond2 = not os.getenv("APPVEYOR_REPO_NAME", "").startswith("lief-project/")
         return cond1 or cond2
     elif ci == CI.CIRCLE_CI:
