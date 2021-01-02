@@ -338,6 +338,6 @@ else:
     sys.exit(1)
 
 
-output_key_path.unlink(missing_ok=True)
+output_key_path.unlink()
 print("ok")
 
