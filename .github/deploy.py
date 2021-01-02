@@ -320,7 +320,7 @@ for i in range(10):
 
     cmds = [
         "{} branch -a -v".format(GIT),
-        "{} fetch -v origin master".format(GIT),
+        "{} fetch -v origin {}".format(GIT, target_branch),
         "{} branch -a -v".format(GIT),
         "{} rebase -s recursive -X theirs FETCH_HEAD".format(GIT),
         "{} branch -a -v".format(GIT),
