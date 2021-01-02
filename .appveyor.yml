@@ -110,6 +110,7 @@ after_build:
         -e APPVEYOR_BUILD_FOLDER="$env:APPVEYOR_BUILD_FOLDER" `
         -e LIEF_AUTOMATIC_BUILDS_KEY="$env:LIEF_AUTOMATIC_BUILDS_KEY" `
         -e LIEF_AUTOMATIC_BUILDS_IV="$env:LIEF_AUTOMATIC_BUILDS_IV" `
+        --rm `
         liefproject/deploy python3 /src/.github/deploy.py
       exit 0
 
