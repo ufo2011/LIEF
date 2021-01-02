@@ -24,6 +24,10 @@ jobs:
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y-%m-%d-%H;%M;%S")"
         shell: bash
+      - name: Setup cache dir
+        shell: bash
+        run: |
+          mkdir -p ~/.ccache
       - name: ccache cache files
         uses: actions/cache@v1.1.0
         with:
@@ -35,6 +39,10 @@ jobs:
         shell: bash
         env:
           MACOSX_DEPLOYMENT_TARGET: "10.14"
+          CCACHE_DIR: ~/.ccache
+          CCACHE_MAXSIZE: 10.0G
+          CCACHE_CPP2: 1
+          CCACHE_COMPRESS: 1
         run: |
           python ./setup.py --ninja build bdist_wheel --plat-name=macosx_${MACOSX_DEPLOYMENT_TARGET}_x86_64
           bash scripts/osx/package_sdk.sh
