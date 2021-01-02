@@ -299,7 +299,7 @@ if p.returncode:
 
 cmds = [
     #f"{GIT} diff --cached --exit-code --quiet",
-    "chown -R 1000:1000 *",
+    #"chown -R 1000:1000 *",
     "{} add .".format(GIT),
     "{} commit -m 'Automatic build'".format(GIT),
     "{} ls-files -v".format(GIT),

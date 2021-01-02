@@ -8,6 +8,7 @@ jobs:
       #- if: branch = master #AND tag IS present AND type = push
       - if: type = push
         services: docker
+        name: "Linux Python 3.5"
         script:
           - >
             docker run --name lief_35
@@ -36,6 +37,7 @@ jobs:
       #- if: branch = master AND tag IS present AND type = push
       - if: type = push
         services: docker
+        name: "Linux Python 3.6"
         script:
           - >
             docker run --name lief_36
