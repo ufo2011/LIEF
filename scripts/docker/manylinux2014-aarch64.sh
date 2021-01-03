@@ -7,7 +7,7 @@
 #  -e PYTHON_BINARY=/opt/python/cp39-cp39/bin/python3.9 \
 #  -v $LIEF_SRC:/work \
 #  -v $HOME/.ccache:/ccache \
-#  --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/manylinux2014-aarch64.sh
+#  --rm liefproject/manylinux2014-aarch64 bash /work/scripts/docker/manylinux2014-aarch64.sh
 # ==============================================================================================
 #
 set -ex

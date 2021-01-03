@@ -7,7 +7,7 @@ set -ex
 #  -e CCACHE_DIR=/ccache \
 #  -v $LIEF_SRC:/work \
 #  -v $HOME/.ccache:/ccache \
-#  --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/linux-aarch64.sh
+#  --rm liefproject/manylinux2014-aarch64 bash /work/scripts/docker/linux-aarch64.sh
 # ==============================================================================================
 #
 

@@ -4,6 +4,9 @@ on: push
 jobs:
   linux-sdk:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -20,7 +23,8 @@ jobs:
           key: linux-aarch64-${{ runner.os }}-${{ steps.get-date.outputs.date }}
           restore-keys: |
               linux-aarch64-${{ runner.os }}-
-      - name: Build
+      - name: Build SDK
+        if: matrix.python-version == '3.7'
         shell: bash
         run: |
           docker run \
@@ -30,31 +34,21 @@ jobs:
            -e CCACHE_DIR=/ccache \
            -v $GITHUB_WORKSPACE:/work \
            -v $HOME/.ccache:/ccache \
-          --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/linux-aarch64.sh
-      - name: Build Python 3.8
+          --rm liefproject/manylinux2014-aarch64 bash /work/scripts/docker/linux-aarch64.sh
+      - name: Build Python ${{ matrix.python-version }} wheel
         shell: bash
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
         run: |
           docker run \
            -e CCACHE_COMPRESS=1 \
            -e CCACHE_MAXSIZE=10.0G \
            -e CCACHE_CPP2=1 \
            -e CCACHE_DIR=/ccache \
-           -e PYTHON_BINARY=/opt/python/cp38-cp38/bin/python3.8 \
+           -e PYTHON_BINARY=/opt/python/cp${PYTHON_VERSION}-cp${PYTHON_VERSION}/bin/python${PYTHON_VERSION} \
            -v $GITHUB_WORKSPACE:/work \
            -v $HOME/.ccache:/ccache \
-          --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/manylinux2014-aarch64.sh
-      - name: Build Python 3.9
-        shell: bash
-        run: |
-          docker run \
-           -e CCACHE_COMPRESS=1 \
-           -e CCACHE_MAXSIZE=10.0G \
-           -e CCACHE_CPP2=1 \
-           -e CCACHE_DIR=/ccache \
-           -e PYTHON_BINARY=/opt/python/cp39-cp39/bin/python3.9 \
-           -v $GITHUB_WORKSPACE:/work \
-           -v $HOME/.ccache:/ccache \
-          --rm liefproject/manylinux2014-aarch64:base bash /work/scripts/docker/manylinux2014-aarch64.sh
+          --rm liefproject/manylinux2014-aarch64 bash /work/scripts/docker/manylinux2014-aarch64.sh
       - name: Deploy
         env:
           LIEF_AUTOMATIC_BUILDS_KEY: ${{ secrets.LIEF_AUTOMATIC_BUILDS_KEY }}
