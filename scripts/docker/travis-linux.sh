@@ -6,7 +6,7 @@ export CFLAGS='-ffunction-sections -fdata-sections -static-libstdc++ -static-lib
 export LDFLAGS='-Wl,--gc-sections -Wl,--exclude-libs,ALL'
 
 $PYTHON_BINARY setup.py --ninja --lief-test build \
-  bdist_wheel --dist-dir wheel_stage
+  bdist_wheel --skip-build --dist-dir wheel_stage
 
 auditwheel repair -w dist --plat manylinux1_x86_64 wheel_stage/*.whl
 

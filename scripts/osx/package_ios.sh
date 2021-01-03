@@ -7,7 +7,7 @@ mkdir -p build/$ARCH_DIR/static-release && mkdir -p build/$ARCH_DIR/shared-relea
 pushd build/$ARCH_DIR/shared-release
 
 cmake ../../.. -GNinja \
-  -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake \
+  -DCMAKE_TOOLCHAIN_FILE=../../../cmake/ios.toolchain.cmake \
   -DBUILD_SHARED_LIBS=on \
   -DLIEF_PYTHON_API=off \
   -DLIEF_INSTALL_COMPILED_EXAMPLES=off \
@@ -20,7 +20,7 @@ popd
 pushd build/$ARCH_DIR/static-release
 
 cmake ../../.. -GNinja \
-  -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake \
+  -DCMAKE_TOOLCHAIN_FILE=../../../cmake/ios.toolchain.cmake \
   -DBUILD_SHARED_LIBS=off \
   -DLIEF_PYTHON_API=off \
   -DLIEF_INSTALL_COMPILED_EXAMPLES=on \
