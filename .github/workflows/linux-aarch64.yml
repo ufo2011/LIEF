@@ -40,12 +40,13 @@ jobs:
         env:
           PYTHON_VERSION: ${{ matrix.python-version }}
         run: |
+          PYTHON_VERSION2=$(echo "${PYTHON_VERSION}" | sed 's/\.//') # Transform 3.8 -> 38
           docker run \
            -e CCACHE_COMPRESS=1 \
            -e CCACHE_MAXSIZE=10.0G \
            -e CCACHE_CPP2=1 \
            -e CCACHE_DIR=/ccache \
-           -e PYTHON_BINARY=/opt/python/cp${PYTHON_VERSION}-cp${PYTHON_VERSION}/bin/python${PYTHON_VERSION} \
+           -e PYTHON_BINARY=/opt/python/cp${PYTHON_VERSION2}-cp${PYTHON_VERSION2}/bin/python${PYTHON_VERSION} \
            -v $GITHUB_WORKSPACE:/work \
            -v $HOME/.ccache:/ccache \
           --rm liefproject/manylinux2014-aarch64 bash /work/scripts/docker/manylinux2014-aarch64.sh
