@@ -122,7 +122,9 @@ foreach(example ${LIEF_CPP_EXAMPLES})
   if(LIEF_INSTALL_COMPILED_EXAMPLES)
     install(
       TARGETS ${output_name}
-      RUNTIME DESTINATION bin COMPONENT examples)
+      RUNTIME DESTINATION bin
+      BUNDLE DESTINATION bin
+      COMPONENT examples)
   endif()
 endforeach()
 
