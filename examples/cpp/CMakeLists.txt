@@ -99,6 +99,9 @@ foreach(example ${LIEF_CPP_EXAMPLES})
   endif()
 
   target_link_libraries("${output_name}" PUBLIC LIB_LIEF)
+  if (APPLE)
+    set_target_properties("${output_name}" PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
+  endif()
 
   if (CMAKE_BUILD_TYPE MATCHES "Release")
     if (UNIX AND NOT APPLE)
