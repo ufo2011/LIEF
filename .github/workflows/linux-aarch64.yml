@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
               linux-aarch64-${{ runner.os }}-
       - name: Build SDK
-        if: matrix.python-version == '3.7'
+        if: matrix.python-version == '3.9'
         shell: bash
         run: |
           docker run \

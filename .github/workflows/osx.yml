@@ -1,4 +1,4 @@
-name: 'OSX Build'
+name: 'macOS'
 on: push
 
 jobs:
@@ -46,10 +46,9 @@ jobs:
           CCACHE_COMPRESS: 1
         run: |
           python ./setup.py --ninja build bdist_wheel --skip-build --plat-name=macosx_${MACOSX_DEPLOYMENT_TARGET}_x86_64
-
       - name: Build SDK
         shell: bash
-        if: matrix.python-version == '3.6'
+        if: matrix.python-version == '3.9' # Build the SDk only with Python 3.9
         env:
           MACOSX_DEPLOYMENT_TARGET: "10.14"
           CCACHE_DIR: ~/.ccache

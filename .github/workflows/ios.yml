@@ -1,4 +1,4 @@
-name: 'LIEF iOS Build'
+name: 'iOS'
 on: push
 
 jobs:
